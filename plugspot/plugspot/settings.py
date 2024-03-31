@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-n+62)719546p6yl40ck$vxqz0^rpp1)pqw9!1rv@pp)=hsd8u#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.vercel.app']
 SITE_ID = 2
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
