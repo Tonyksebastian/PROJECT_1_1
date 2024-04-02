@@ -56,24 +56,21 @@ def login(request):
     return render(request, 'login.html')
 
 def admin_login(request):
-    error_message = None  # Initialize error message variable
+    error_message = None
 
     if request.method == 'POST':
         email = request.POST.get('email')
-        password = request.POST.get('pass')
+        password = request.POST.get('password')
 
         if email and password:
             user = authenticate(request, email=email, password=password)
-            if user is not None:
-                if user.role == 'admin':
-                    auth_login(request, user)
-                    request.session['user_email'] = user.email
-                    request.session['user_role'] = user.role
-                    return redirect('/')
-                else:
-                    error_message = "This user is not registered as admin."
+            if user is not None and user.role == 'admin':
+                auth_login(request, user)
+                request.session['user_email'] = user.email
+                request.session['user_role'] = user.role
+                return redirect('/')  # Redirect to the appropriate page
             else:
-                error_message = "Invalid login credentials."
+                error_message = "Invalid login credentials or user is not registered as admin."
         else:
             error_message = "Please fill out all fields."
 
