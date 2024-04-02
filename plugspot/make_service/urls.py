@@ -43,7 +43,6 @@ urlpatterns = [
     path('car_guide_view', views.car_guide_view, name='car_guide_view'),
     path('complted_worker_dash', views.complted_worker_dash, name='complted_worker_dash'),
 
-
 ]
 
 
