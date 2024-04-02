@@ -104,16 +104,11 @@ WSGI_APPLICATION = 'plugspot.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-import dj_database_url
 DATABASES = {
-    'default': dj_database_url.parse("postgres://plugspot_user:EUhadw7pnW9L0fTsxFuNJScmsb3oGJya@dpg-co5cu8a0si5c73f6g7o0-a.singapore-postgres.render.com/plugspot")
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
