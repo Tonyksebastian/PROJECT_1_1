@@ -1,8 +1,7 @@
-
 from datetime import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-
+from django.utils import timezone as dj_timezone
 
 class UserManager(BaseUserManager):
     def create_user(self, first_name, last_name, email, phone, password=None, **extra_fields):
@@ -93,7 +92,7 @@ class OTPModel(models.Model):
     expires_at = models.DateTimeField()
 
     def is_valid(self):
-        return self.expires_at > timezone.now()
+        return self.expires_at > dj_timezone.now()
     
     def __str__(self):
         return f"OTP for {self.user.username}"        
