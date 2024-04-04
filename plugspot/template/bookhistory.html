@@ -135,7 +135,7 @@
     <div class="head w-100 text-center text-primary fs-5 p-1">
         <div class="container-sm mt-1">
           <h5 class="text-center">Generate Report</h5>
-          <form method="post" action="{% url "booking_receipt" %}" class="mx-auto">
+          <form method="post" action="{% url 'booking_receipt' %}" class="mx-auto">
             {% csrf_token %}
             <div class="form-group p-1">
               <label for="start_date" class="fs-6">From Date:</label>

@@ -193,7 +193,7 @@
         <a href="{% url 'add_services' i.id %}"><button class="book-now-btn btn-sm bg-primary">Add Services</button></a>
         <a href="{% url 'ser_update' i.id %}"><button class="book-now-btn btn-sm bg-dark">Update Station</button></a>
         <a href="{% url 'services' i.id %}"><button class="book-now-btn btn-sm">My services</button></a>
-        <button class="book-now-btn btn-sm bg-danger" onclick="deleConfirmation('{{i.id}}')">Delete</button>
+        <button class="book-now-btn btn-sm bg-danger" onclick="deleConfirmation('{{i.id}}')">Delete</button>{{i.id}}
 
         <button type="button" class="book-now-btn btn-sm bg-info mt-1" onclick="showConfirmation('{{i.id}}')">
           <i class="bi bi-trash"></i> Shut Down
@@ -239,7 +239,7 @@
     }).then((result) => {
       if (result.isConfirmed) {
         console.log("if")
-        window.location.href = "{% url 'ser_delete' 0 %}".replace('0', tour_id);
+        window.location.href = "{% url 'ser_station__delete' 0 %}".replace('0', tour_id);
       }
     });
   }

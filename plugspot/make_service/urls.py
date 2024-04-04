@@ -21,6 +21,10 @@ urlpatterns = [
     path('attend_service_booking/<int:booking_id>/', views.attend_service_booking, name='attend_service_booking'),
     path('ser_update/<int:stid2>', views.ser_update, name='ser_update'),
     path('ser_delete/<int:stid2>', views.ser_delete, name='ser_delete'),
+    path('ser_station__delete/<int:stid2>/', views.ser_station__delete, name='ser_station__delete'),
+
+    
+
     path('delete_service/<int:service_id>/', views.delete_service, name='delete_service'),
     path('mybooking/', views.mybooking, name='mybooking'),   
     path('toggle_service_visibility/<int:service_id>/<int:station_id>/', views.toggle_service_visibility, name='toggle_service_visibility'),
@@ -42,8 +46,10 @@ urlpatterns = [
     # path('cart', views.cart, name='cart'),
     path('car_guide_view', views.car_guide_view, name='car_guide_view'),
     path('complted_worker_dash', views.complted_worker_dash, name='complted_worker_dash'),
-
+    path('ended_service_bookings/', ended_service_bookings, name='ended_service_bookings'),
+    path('ended_booking_receipt/', ended_booking_receipt, name='ended_booking_receipt'),
 ]
+
 
 
 

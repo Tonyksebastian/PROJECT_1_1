@@ -315,10 +315,17 @@ def ser_update(request, stid2):
         return render(request, "ser_station_update.html", {'myStation': myStation})
 
 def ser_delete(request, stid2):
-    station_to_hide = get_object_or_404(service_station, id=stid2)
-    station_to_hide.hidden = True
+    station_to_hide = service_station.objects.get(id=stid2)
+    station_to_hide.status = True
     station_to_hide.save()
     return redirect('myservice_station')
+
+def ser_station__delete(request, stid2):
+    station_to_del = service_station.objects.get(id=stid2)
+    station_to_del.status = True
+    station_to_del.save()
+    return redirect('myservice_station')
+
 
 def delete_service(request, service_id):
     service_to_hide = get_object_or_404(add_service, id=service_id)
@@ -681,3 +688,78 @@ def worker_dash(request):
 
 def myservice_station_bookings(request):
     return render(request,"myservice_station_booking.html")
+
+
+def ended_service_bookings(request):
+    user_id = request.user.id
+    
+    # Query service_booking to get all ended bookings for the logged-in user with payment_done=True
+    ended_bookings = service_booking.objects.filter(user_id=user_id, completed=True, payment_done=True).order_by('-date')
+
+    context = {
+        'ended_bookings': ended_bookings,
+    }
+    
+    return render(request,"service_ended_booking.html", context)
+
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+from io import BytesIO
+from datetime import datetime
+from .models import service_booking
+
+def ended_booking_receipt(request):
+    user_id = request.user.id
+    if request.method == "POST":
+        start_date_str = request.POST.get("start_date")
+        end_date_str = request.POST.get("end_date")
+
+        # Parse the start and end dates from the form
+        start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+        end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+
+        # Query the service bookings for records within the specified date range
+        booking_history = service_booking.objects.filter(
+            user_id=user_id,
+            date__gte=start_date,
+            date__lte=end_date,
+            completed=True,
+            payment_done=True
+        ).order_by('-date')
+
+  
+        context = {
+            'booking_history': booking_history,
+            'start_date': start_date,
+            'end_date': end_date,
+
+            # 'total_price': total_price,  # Pass the total_price to the template
+        }
+
+        # Render the receipt template to HTML
+        template_name = 'service_ended_booking_receipt.html'
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'inline; filename="service_booking_receipt_from_{start_date}_to_{end_date}.pdf"'
+
+        buffer = BytesIO()
+        pdf = pisa.pisaDocument(BytesIO(render_to_string(template_name, context).encode("UTF-8")), buffer)
+        
+        if not pdf.err:
+            response.write(buffer.getvalue())
+            return response
+        response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="service_booking_receipt_from_{start_date}_to_{end_date}.pdf"'
+
+    # Render the HTML template to PDF
+    with open('user/receipt.html', 'r') as template_file:
+        template_content = template_file.read()
+        rendered_html = render(request, 'service_ended_booking_receipt.html', context)
+
+        # Create a PDF using pisa
+        pisa_status = pisa.CreatePDF(
+            rendered_html.content,
+            dest=response,
+            link_callback=None  # Optional: Handle external links
+        )
+    return response
