@@ -66,7 +66,6 @@ class On_payment(models.Model):
     additional_service = models.OneToOneField(service_booking, null=True, blank=True, on_delete=models.SET_NULL)
     payment_id = models.CharField(null=True, default='123', max_length=30)
     status = models.BooleanField(default=False)
-
     def __str__(self):
         return str(self.user)
 

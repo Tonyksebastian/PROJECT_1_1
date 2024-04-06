@@ -314,53 +314,42 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-dark mb-3 justify-content-end px-5">
         <a href="{% url 'index' %}" class="btn m-1">Home</a>
-        <a href="{% url 'admin_service_dash' %}" class="btn m-1">Service Station Details</a>
+
+
         <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Print Chargings station
-          </button>
-          <div class="dropdown-menu" id="dropdown"  aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" id="open-button1" href="#">Print User Details</a>
-            <a class="dropdown-item" id="open-button2" href="#">Print Bookings</a>
-            <a class="dropdown-item" id="open-button3" href="#">Print Stations</a>
-            <a class="dropdown-item" id="open-button4" href="#">Print Payments</a>
-    
-          </div>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Print Service station
+            </button>
+            <div class="dropdown-menu" id="dropdown" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" id="open-button1" href="#">Print User Details</a>
+                <a class="dropdown-item" id="open-button2" href="#">Print Service Bookings</a>
+                <a class="dropdown-item" id="open-button3" href="#">Print Service Stations</a>
+                <a class="dropdown-item" id="open-button4" href="#">Print Payments</a>
+
+            </div>
         </div>
-        <a href="{% url 'add_subscription' %}" class="btn m-1">Add subscription</a>
         <a id="logout" class="btn m-1" href="{% url 'logout' %}">Logout</a>
         <a href="{% url 'profile' %}" class="btn-pro m-1">{{ user.first_name }}</a>
-      </nav>
+    </nav>
     <div class="container-fluid mt-5 w-50">
         <div class="row justify-content-between">
             <div class="col-sm-4">
                 <div class="count-box">
-                    <div class="count-number">{{ total_user }}</div>
-                    <div class="count-label">Total Users</div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="count-box">
                     <div class="count-number">{{ user_book }}</div>
-                    <div class="count-label">Total Booking</div>
+                    <div class="count-label">Total Service Booking</div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="count-box">
                     <div class="count-number">{{ total_complete }}</div>
-                    <div class="count-label">Completed Booking</div>
+                    <div class="count-label">Service Completed</div>
                 </div>
             </div>
             <div class="col-sm-4 mt-1">
                 <div class="count-box">
                     <div class="count-number">{{ station_count }}</div>
-                    <div class="count-label">Total Stations</div>
-                </div>
-            </div>
-            <div class="col-sm-4 mt-1 w-100 justify-content-center">
-                <div class="count-box">
-                    <div class="count-number">{{ payment_count }}</div>
-                    <div class="count-label">Total Payments</div>
+                    <div class="count-label">Active Service Stations</div>
                 </div>
             </div>
         </div>
@@ -406,21 +395,16 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-5">
-                            <h2><b>Management</b> Booking Panel</h2>
+                            <h2><b>Management</b> Station Details </h2>
                         </div>
                         <div class="col-sm-7">
 
                             <a href="#" class="btn btn-secondary" id="exportCSV"><i class="material-icons">&#xE24D;</i>
                                 <span>Export to Excel</span></a>
-                            <a href="{% url 'booking_dash' %}" class="btn btn-secondary"><i
+                            <a href="{% url 'admin_service_dash' %}" class="btn btn-secondary"><i
                                     class="material-icons">&#xe88a;</i>
                                 <span>Booking Data</span></a>
-                            <a href="{% url 'station_dash' %}" class="btn btn-secondary"><i
-                                    class="material-icons">&#xe88a;</i>
-                                <span>Station Data</span></a>
-                            <a href="{% url 'dashboard' %}" class="btn btn-secondary"><i
-                                    class="material-icons">&#xe88a;</i>
-                                <span>User Data</span></a>
+
                         </div>
                     </div>
                 </div>
@@ -430,41 +414,32 @@
                             <th>Sid</th>
                             <th>Station Name</th>
                             <th>Owner Name</th>
-                            <th>Slotnumber</th>
-                            <th>Date</th>
-                            <th>Start-time</th>
-                            <th>End-time</th>
+                            <th>Place</th>
+                            <th>Maxslot</th>
+                            <th>Date of Creation</th>
                             <th>Status</th>
-                            <th>Action</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        {% if user.is_authenticated %}
-                        {% for i in stdata %}
+                        {% for i in station %}
                         <tr>
-                            <td>{{ forloop.counter0 }}</td>
-                            <!-- <td><a href="#"><img src="/examples/images/avatar/1.jpg" class="avatar" alt="Avatar">
-                                    Michael Holz</a></td> -->
+                            <td>{{ forloop.counter }}</td>
                             <td>{{i.stname}}</td>
                             <td>{{i.ownername}}</td>
-                            <td>{{i.slotnumber}}</td>
+                            <td>{{i.place}}</td>
+                            <td>{{i.maxslot}}</td>
                             <td>{{i.date}}</td>
-                            <td>{{i.start_time}}</td>
-                            <td>{{i.end_time}}</td>
-                            {% if i.status == True %}
+
+                            {% if i.hidden == False %}
                             <td><span class="status text-success">&bull;</span> Active</td>
                             {% else %}
                             <td><span class="status text-danger">&bull;</span> InActive</td>
                             {% endif %}
-                            <td>
-                                <!-- <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i
-                    class="material-icons">&#xE8B8;</i></a> -->
-                                <a href="{% url 'delete_adm_book' i.id %}" class="delete" title="Delete"
-                                    data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
-                            </td>
+
+
                         </tr>
                         {% endfor %}
-                        {% endif %}
                     </tbody>
                 </table>
                 <div class="clearfix">

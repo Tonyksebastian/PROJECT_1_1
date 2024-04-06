@@ -215,6 +215,11 @@ Fix to show in full screen demo
               <th>Status</th>
               <th>Make Payment</th>
               <th>Delete</th>
+              {% if user.role == 'vhowner' %}
+              <th>Details</th>
+              {% endif %}
+
+
             </tr>
           </thead>
           <tbody>
@@ -256,7 +261,7 @@ Fix to show in full screen demo
                     Proceed to payment
                   </a>
                 </button>
-              </td>             
+              </td>
               {% else %}
               <td>
                 <button class="btn btn-sm bg-success" data-title="Delete" disabled>
@@ -275,6 +280,17 @@ Fix to show in full screen demo
               <td>
                 <button class="btn btn-sm bg-danger" data-title="Delete"
                   onclick="deleConfirmation('{{ booking.id }}')">Delete</button>
+              </td>
+              {% endif %}
+              {% if user.role == 'vhowner' %}
+
+              <td>
+                <form method="post" action="{% url 'detailed_book_data' booking.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-link attend" title="View">
+                    View
+                  </button>
+                </form>
               </td>
               {% endif %}
             </tr>

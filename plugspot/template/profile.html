@@ -172,7 +172,9 @@
     <a id="home" href="{% url 'subscription' %}" class="btn m-1">Subscription</a>
     <a id="home" href="{% url 'mystation' %}" class="btn m-1">My Charging Stations</a>
     <a id="home" href="{% url 'myservice_station'%}" class="btn m-1">My Service Stations</a>
-    <a id="home" href="{% url 'allbooking' %}" class="btn m-1">All Bookings</a>
+    <a id="home" href="{% url 'allbooking' %}" class="btn m-1">All charging station Bookings</a>
+    <a id="home" href="{% url 'myservice_station' %}" class="btn m-1">All Service station Bookings</a>
+
     {% endif %}
     {% if user.role == 'vhowner' %}
     <a id="home" href="{% url 'mybookings' %}" class="btn m-1">My Charging station Bookings</a>

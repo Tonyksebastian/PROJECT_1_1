@@ -19,6 +19,12 @@ from bs4 import BeautifulSoup
 import requests
 # Create your views here.
 
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+from io import BytesIO
+from datetime import datetime
+from .models import service_booking
 
 @login_required
 def addservicestation(request):
@@ -129,7 +135,7 @@ def contact(request):
 
 from django.db.models import Avg
 def select_station(request):
-    stations = service_station.objects.filter(hidden=False).order_by("-date")
+    stations = service_station.objects.filter(hidden=False,status=False).order_by("-date")
     for station in stations:
         if station.description:
             station.descriptions_list = station.description.split(',')
@@ -173,7 +179,7 @@ def myfavservicest(request):
 
 def myservice_station(request):
     user_id = request.user.id
-    mystation = service_station.objects.filter(user_id=user_id, hidden=False)
+    mystation = service_station.objects.filter(user_id=user_id, hidden=False,status=False)
     return render(request, "myservice_station.html", {'mystation': mystation})
 
 
@@ -324,6 +330,7 @@ def ser_station__delete(request, stid2):
     station_to_del = service_station.objects.get(id=stid2)
     station_to_del.status = True
     station_to_del.save()
+    print('hello')
     return redirect('myservice_station')
 
 
@@ -671,7 +678,6 @@ def car_guide_view(request):
         'formatted_h2': formatted_h2
     })
 
-
 def complted_worker_dash(request):
     user = request.user
     data = CustomUser.objects.filter(id=user.id)
@@ -681,10 +687,10 @@ def complted_worker_dash(request):
 
 def worker_dash(request):
     user = request.user
-    data = CustomUser.objects.filter(id=user.id)
-    total_booking = service_booking.objects.filter(status=True).count()
+    # data = CustomUser.objects.filter(id=user.id)
+    # total_booking = service_booking.objects.filter(status=True).count()
     bookings = service_booking.objects.all()
-    return render(request, "worker_dashboard.html", {'bookings': bookings, 'data': data, 'total_booking': total_booking})
+    return render(request, "worker_dashboard.html", {'bookings': bookings})
 
 def myservice_station_bookings(request):
     return render(request,"myservice_station_booking.html")
@@ -702,12 +708,6 @@ def ended_service_bookings(request):
     
     return render(request,"service_ended_booking.html", context)
 
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from xhtml2pdf import pisa
-from io import BytesIO
-from datetime import datetime
-from .models import service_booking
 
 def ended_booking_receipt(request):
     user_id = request.user.id
@@ -763,3 +763,54 @@ def ended_booking_receipt(request):
             link_callback=None  # Optional: Handle external links
         )
     return response
+
+
+def admin_service_dash(request):
+    data = CustomUser.objects.all()
+    total_user = CustomUser.objects.filter(is_active=True).count()
+    total_book = service_booking.objects.filter(del_status=False).count()
+    total_complete=service_booking.objects.filter(payment_done=True).count()
+    station_count = service_station.objects.filter(hidden=False).count()
+    bookings=service_booking.objects.filter(status=True)
+    context = {
+        'data': data,
+        'total_user': total_user,
+        'user_book': total_book,
+        'total_complete':total_complete ,
+        'station_count': station_count,
+        'bookings':bookings,
+
+    }
+    return render(request, "service_admin_dash.html",context)
+
+
+def service_station_dash(request):
+    data = CustomUser.objects.all()
+    total_user = CustomUser.objects.filter(is_active=True).count()
+    total_book = service_booking.objects.filter(del_status=False).count()
+    total_complete=service_booking.objects.filter(payment_done=True).count()
+    station_count = service_station.objects.filter(hidden=False).count()
+    station=service_station.objects.all()
+
+    context = {
+        'data': data,
+        'total_user': total_user,
+        'user_book': total_book,
+        'total_complete':total_complete ,
+        'station_count': station_count,
+        'station':station,
+
+    }
+    return render(request, "service_station_dash.html",context)
+
+
+def myservice_bookings(request, ser_id):
+    # Filter service_booking objects based on the provided ser_id
+    bookings = service_booking.objects.filter(package__service__service__id=ser_id)
+    return render(request, "service_station_own_dash.html", {'bookings': bookings})
+
+
+def myservice_bookings_print(request, ser_id):
+    # Filter service_booking objects based on the provided ser_id
+    bookings = service_booking.objects.filter(package__service__service__id=ser_id)
+    return render(request, "service_station_own_dash.html", {'bookings': bookings})

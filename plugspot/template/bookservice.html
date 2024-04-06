@@ -25,6 +25,9 @@
       font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
         sans-serif;
     }
+    .container{
+      padding: 25px;
+    }
 
     .btn {
       background-color: #3498db;
@@ -122,17 +125,15 @@
     <a href="{% url 'select_station' %}" class="btn m-1">Available Service Stations</a>
     <a href="{% url 'profile' %}" class="btn-pro m-1">{{ user.first_name }}</a>
   </nav>
-  
-    <div class="d-flex p-5 fw-bold font-italic ml-5 pl-3 w-100"></div>
-    <p class="m-0">Book your Car Service -- Online Booking</p>
-    <div class="ml-auto d-flex justify-content-end w-100">
-        <a href="{% url 'feedback_page' ser_id=ser_id %}" class="text-decoration-none custom-link">
-            <button class="btn bg-primary" type="button">Review</button>
-        </a>
-    </div>
-</div>
 
 <div class="container">
+  <p class="m-0">Book your Car Service -- Online Booking</p>
+  <div class="ml-auto d-flex justify-content-end w-100">
+    
+      <a href="{% url 'feedback_page' ser_id=ser_id %}" class="text-decoration-none custom-link">
+          <button class="btn bg-primary" type="button">Review</button>
+      </a>
+  </div>
   {% for i in ser_data %}
   {% if forloop.counter0|divisibleby:2 %}
   <div class="row">
@@ -215,17 +216,3 @@
 </body>
 
 </html>
-
-
-
-
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  
-</body>
-</html>dfvghn

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -315,49 +316,40 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-dark mb-3 justify-content-end px-5">
     <a href="{% url 'index' %}" class="btn m-1">Home</a>
 
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <!-- <div class="dropdown">
+      <button class="btn m-1 dropdown-toggle" type="button" id="printDropdown" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
         Print details
       </button>
-      <div class="dropdown-menu" id="dropdown"  aria-labelledby="dropdownMenuButton">
+      <ul class="dropdown-menu" id="dropdown" aria-labelledby="printDropdown">
+        <li><select id="open-button1" class="dropdown-item" value="Print User Details"></select></li>
+        <li><select id="open-button2" class="dropdown-item">Print Bookings</select></li>
+        <li><select id="open-button3" class="dropdown-item">Print Stations</select></li>
+      </ul>
+    </div> -->
+
+    <!-- <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        Print details
+      </button>
+      <div class="dropdown-menu" id="dropdown" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" id="open-button1" href="#">Print User Details</a>
         <a class="dropdown-item" id="open-button2" href="#">Print Bookings</a>
         <a class="dropdown-item" id="open-button3" href="#">Print Stations</a>
         <a class="dropdown-item" id="open-button4" href="#">Print Payments</a>
-
       </div>
-    </div>
-    <a href="{% url 'add_subscription' %}" class="btn m-1">Add subscription</a>
-    <a href="{% url 'admin_service_dash' %}" class="btn m-1">Service Station Details</a>
+    </div> -->
+    
     <a id="logout" class="btn m-1" href="{% url 'logout' %}">Logout</a>
     <a href="{% url 'profile' %}" class="btn-pro m-1">{{ user.first_name }}</a>
   </nav>
-
-
-  <div class="container-fluid mt-5 w-50">
+  <!-- <div class="container-fluid mt-5 w-50">
     <div class="row justify-content-between">
-      <div class="col-sm-4">
-        <div class="count-box">
-          <div class="count-number">{{ total_user }}</div>
-          <div class="count-label">Total Users</div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="count-box">
-          <div class="count-number">{{ user_book }}</div>
-          <div class="count-label">Total Booking</div>
-        </div>
-      </div>
       <div class="col-sm-4">
         <div class="count-box">
           <div class="count-number">{{ total_complete }}</div>
           <div class="count-label">Completed Booking</div>
-        </div>
-      </div>
-      <div class="col-sm-4 mt-1">
-        <div class="count-box">
-          <div class="count-number">{{ station_count }}</div>
-          <div class="count-label">Total Stations</div>
         </div>
       </div>
       <div class="col-sm-4 mt-1 w-100 justify-content-center">
@@ -367,10 +359,9 @@
         </div>
       </div>
     </div>
-    <!-- Rest of your code -->
-  </div>
+  </div> -->
 
-  <div id="date-range-form-overlay">
+  <!-- <div id="date-range-form-overlay">
     <div id="date-range-form">
       <form method="post" action="" id="date-form">
         {% csrf_token %}
@@ -386,7 +377,7 @@
         <button type="button" id="cancel" class="btn btn-secondary">Cancel</button>
       </form>
     </div>
-  </div>
+  </div> -->
 
   <div class="container-fluid mt-5">
     <div class="row justify-content-center">
@@ -410,63 +401,67 @@
         <div class="table-title">
           <div class="row">
             <div class="col-sm-5">
-              <h2><b>Management</b> User Panel</h2>
+              <h2><b>Management</b> Service Panel</h2>
             </div>
             <div class="col-sm-7">
 
               <a href="#" class="btn btn-secondary" id="exportCSV"><i class="material-icons">&#xE24D;</i>
                 <span>Export to Excel</span></a>
-              <a href="{% url 'booking_dash' %}" class="btn btn-secondary"><i class="material-icons">&#xe88a;</i>
-                <span>Booking Data</span></a>
-              <a href="{% url 'station_dash' %}" class="btn btn-secondary"><i class="material-icons">&#xe88a;</i>
-                <span>Station Data</span></a>
-              <a href="{% url 'dashboard' %}" class="btn btn-secondary"><i class="material-icons">&#xe88a;</i>
-                <span>User Data</span></a>
             </div>
           </div>
+          
         </div>
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Sid</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>date_joined</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if user.is_authenticated %}
-            {% for i in data %}
-            {% if i.is_staff == False %}
-            <tr>
-              <td>{{ forloop.counter0 }}</td>
-              <!-- <td><a href="#"><img src="/examples/images/avatar/1.jpg" class="avatar" alt="Avatar">
-                                    Michael Holz</a></td> -->
-              <td>{{i.first_name}} {{i.last_name}}</td>
-              <td>{{i.email}}</td>
-              <td class="searchable-date">{{i.date_joined}}</td>
-              <td>{{i.role}}</td>
-              {% if i.is_active %}
-              <td><span class="status text-success">&bull;</span> Active</td>
-              {% else %}
-              <td><span class="status text-danger">&bull;</span> InActive</td>
-              {% endif %}
-
-              <td>
-                <!-- <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i
-                    class="material-icons">&#xE8B8;</i></a> -->
-                <a href="{% url 'delete_adm_user' i.id %}" class="delete" title="Delete" data-toggle="tooltip"><i
-                    class="material-icons">&#xE5C9;</i></a>
-              </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-          </tbody>
+        <!-- Assuming your table structure looks like this -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Vehicle No</th>
+                    <th>Service Schedule</th>
+                    <th>Make</th>  
+                    <th>Model</th>
+                    <th>Date</th>              
+                    <th>Km Done</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% if user.is_authenticated %}
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ booking.vehno }}</td>
+                    <td>{{ booking.slotnumber }}</td>
+                    <td>{{ booking.company }}</td>
+                    <td>{{ booking.model }}</td>
+                    <td>{{ booking.date }}</td>
+                    <td>{{ booking.km_done }}</td>
+                    <td>
+                        {% if booking.status and booking.completed %}
+                            <span class="status-icon text-success">&#x25CF;</span> Completed
+                        {% elif booking.status and not booking.completed %}
+                            <span class="status-icon text-warning">&#x25CF;</span> Attended
+                        {% else %}
+                            <span class="status-icon text-danger">&#x25CF;</span> Pending
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'detailed_book_data' booking.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link attend" title="View">
+                                View
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
         </table>
+        
+
         <div class="clearfix">
           <div class="pagination">
             <div class="btn-group">
@@ -487,7 +482,6 @@
         </div>
       </div>
     </div>
-    <div id="myPieChart" style="width: 400px; height: 400px; margin: auto;"></div>
 </body>
 <script>
   // your_app/static/your_app/js/overlay.js

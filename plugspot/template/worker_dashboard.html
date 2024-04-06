@@ -362,7 +362,7 @@
     </div>
   </div> -->
 
-  <div id="date-range-form-overlay">
+  <!-- <div id="date-range-form-overlay">
     <div id="date-range-form">
       <form method="post" action="" id="date-form">
         {% csrf_token %}
@@ -378,7 +378,7 @@
         <button type="button" id="cancel" class="btn btn-secondary">Cancel</button>
       </form>
     </div>
-  </div>
+  </div> -->
 
   <div class="container-fluid mt-5">
     <div class="row justify-content-center">
@@ -398,106 +398,96 @@
   </div>
   <div class="container-xl">
     <div class="table-responsive">
-      <div class="table-wrapper">
-        <div class="table-title">
-          <div class="row">
-            <div class="col-sm-5">
-              <h2><b>Management</b> Service Panel</h2>
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h2><b>Management</b> Service Panel</h2>
+                    </div>
+                    <div class="col-sm-7">
+                        <a href="#" class="btn btn-secondary" id="exportCSV"><i class="material-icons">&#xE24D;</i>
+                            <span>Export to Excel</span></a>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-7">
+            <!-- Assuming your table structure looks like this -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Vehicle No</th>
+                        <th>Service Schedule</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>date</th>
+                        <th>Km Done</th>
+                        <th>Status</th>
+                        
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if user.is_authenticated %}
+                    {% for booking in bookings %}
+                    {% if not booking.user_id.is_staff %}
+                    <tr>
+                        <td>{{ forloop.counter0 }}</td>
+                        <td>{{ booking.vehno }}</td>
+                        <td>{{ booking.slotnumber }}</td>
+                        <td>{{ booking.company }}</td>
+                        <td>{{ booking.model }}</td>
+                        <td>{{ booking.date }}</td>
+                        <td>{{ booking.km_done }}</td>
+                        {% if booking.status and booking.completed %}
+                        <td><span class="status-icon text-success">&#x25CF;</span> Completed</td>
+                        {% elif booking.status and not booking.completed %}
+                        <td><span class="status-icon text-warning">&#x25CF;</span> Attended</td>
+                        {% else %}
+                        <td><span class="status-icon text-danger">&#x25CF;</span> Pending</td>
+                        {% endif %}
+                        <td>
+                            {% if booking.status %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link attend" title="Attend" disabled>
+                                    Proceeded
+                                </button>
+                                {% else %}
+                                <a href="{% url 'attend_service_booking' booking.id %}" class="btn btn-link attend">
+                                    Attend
+                                </a>
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
 
-              <a href="#" class="btn btn-secondary" id="exportCSV"><i class="material-icons">&#xE24D;</i>
-                <span>Export to Excel</span></a>
+            <div class="clearfix">
+                <div class="pagination">
+                    <div class="btn-group">
+                        <button id="prevBtn" class="btn btn-primary btn-sm mx-2">Previous</button>
+                        <button id="nextBtn" class="btn btn-primary btn-sm mx-2">Next</button>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <div class="container-fluid mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-sm-12 col-md-6">
+                        <div id="custom-search-input">
+                        </div>
+                    </div>
+                    <!-- Rest of your HTML code -->
+                </div>
+            </div>
         </div>
-        <!-- Assuming your table structure looks like this -->
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Vehicle No</th>
-              <th>Service Schedule</th>
-              <th>Make</th>  
-              <th>Model</th>
-              <th>date</th>              
-              <th>Km Done</th>
-              <th>Status</th>
-              <th>Action</th>
-              <th>Details</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            {% if user.is_authenticated %}
-            {% for booking in bookings %}
-            {% if not booking.user_id.is_staff %}
-            <tr>
-              <td>{{ forloop.counter0 }}</td>
-              <td>{{ booking.vehno }}</td>
-              <td>{{ booking.slotnumber }}</td>
-              <td>{{ booking.company }}</td>
-              <td>{{ booking.model }}</td>
-              <td>{{ booking.date }}</td>
-              <td>{{ booking.km_done }}</td>
-              <td>
-            {% if booking.status and booking.completed %}
-                <span class="status-icon text-success">&#x25CF;</span> Completed
-            {% elif booking.status and not booking.completed %}
-                <span class="status-icon text-warning">&#x25CF;</span> Attended
-            {% else %}
-                <span class="status-icon text-danger">&#x25CF;</span> Pending
-            {% endif %}
-            
-              <td>
-                {% if booking.status %}
-                <form method="post">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-link attend" title="Attend" disabled>
-                   Proceeded
-                  </button>
-                  {% else %}
-                  <a href="{% url 'attend_service_booking' booking.id %}" class="btn btn-link attend">
-                    Attend
-                   </a>
-                   {% endif %}
-                </form>
-              </td>
-              <td>
-                <form method="post" action="{% url 'detailed_book_data' booking.id %}">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-link attend" title="Attend">
-                   View
-                  </button>
-                </form>
-              </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-          </tbody>
-        </table>
-
-        <div class="clearfix">
-          <div class="pagination">
-            <div class="btn-group">
-              <button id="prevBtn" class="btn btn-primary btn-sm mx-2">Previous</button>
-              <button id="nextBtn" class="btn btn-primary btn-sm mx-2">Next</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="container-fluid mt-5">
-          <div class="row justify-content-center">
-            <div class="col-sm-12 col-md-6">
-              <div id="custom-search-input">
-              </div>
-            </div>
-            <!-- Rest of your HTML code -->
-          </div>
-        </div>
-      </div>
     </div>
+</div>
+
 </body>
 <script>
   // your_app/static/your_app/js/overlay.js

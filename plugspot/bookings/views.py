@@ -696,18 +696,26 @@ def subscription_view(request):
     subscriptions = Subscription.objects.all()
 
     # Get the user's subscribed plans (if any)
-    user_subscriptions = On_payment.objects.filter(user=request.user, subscribe__isnull=True)
-    
+    user_subscriptions = On_payment.objects.filter(user=request.user, subscribe__isnull=False)
+
     # Create a set of subscription IDs that the user has subscribed to
-    subscribed_plan_ids = set(subscribe.id for subscribe in user_subscriptions)
-    unpaid_payments = On_payment.objects.filter(status=False)
+    subscribed_plan_ids = set(subscription.subscribe.id for subscription in user_subscriptions)
+
+    # Get unpaid payments for the current user
+    unpaid_payments = On_payment.objects.filter(user=request.user, status=False)
+
+    # Create a set of subscription IDs for unpaid payments
+    unpaid_plan_ids = set(payment.subscribe.id for payment in unpaid_payments)
+
     context = {
         'unpaid_payments': unpaid_payments,
         'subscriptions': subscriptions,
         'subscribed_plan_ids': subscribed_plan_ids,
+        'unpaid_plan_ids': unpaid_plan_ids,
     }
 
     return render(request, 'pricing.html', context)
+
     
 def add_subscription(request):
     if request.method == 'POST':
