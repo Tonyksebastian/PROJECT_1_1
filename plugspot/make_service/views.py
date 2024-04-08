@@ -549,7 +549,7 @@ def delete_added_work(request, service_id):
 def feedback_page(request, ser_id):
     
     user_id = request.user.id
-    feedbacks = Feedback.objects.filter(station_id=ser_id,status=False).order_by("-date")
+    feedbacks = Feedback.objects.filter(station_id=ser_id,status=True).order_by("-date")
     return render(request, 'feedback.html', {'feedbacks': feedbacks,'station_id':ser_id,'user_id':user_id})
 
 def add_comment(request, ser_id):

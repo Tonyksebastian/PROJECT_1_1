@@ -422,7 +422,6 @@
                         <th>date</th>
                         <th>Km Done</th>
                         <th>Status</th>
-                        
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -458,6 +457,14 @@
                                 </a>
                                 {% endif %}
                             </form>
+                        </td>
+                        <td>
+                          <form method="post" action="{% url 'detailed_book_data' booking.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link attend" title="Attend">
+                             View
+                            </button>
+                          </form>
                         </td>
                     </tr>
                     {% endif %}

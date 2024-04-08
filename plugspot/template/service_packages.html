@@ -77,9 +77,9 @@
             text-decoration: none;
             position: relative;
             background-color: transparent;
-          }
-      
-          .navbar .btn:before {
+        }
+
+        .navbar .btn:before {
             content: "";
             position: absolute;
             bottom: -3px;
@@ -90,28 +90,28 @@
             transform: scaleX(0);
             transform-origin: right;
             transition: transform 0.3s ease-in-out;
-          }
-      
-          .navbar .btn:hover {
+        }
+
+        .navbar .btn:hover {
             color: #8cc63f;
             /* Green color for text on hover */
-          }
-      
-          .navbar .btn:hover:before {
+        }
+
+        .navbar .btn:hover:before {
             background-color: #8cc63f;
             /* Green color for underline on hover */
             transform: scaleX(1);
             transform-origin: left;
-          }
-      
-          h2 {
+        }
+
+        h2 {
             color: #ffffff;
             padding: 3px;
             font-weight: bold;
             border: solid 3px #38373d;
-          }
-      
-          .btn-pro {
+        }
+
+        .btn-pro {
             text-decoration: none;
             color: aliceblue;
             background-color: #8cc63f;
@@ -119,29 +119,27 @@
             width: 70px;
             text-align: center;
             border-radius: 5px;
-          }
-      
-          .btn-pro:hover {
+        }
+
+        .btn-pro:hover {
             background-color: aliceblue;
             color: black;
-          }
-      
+        }
+
     </style>
 </head>
 
 <body>
-    <nav
-    class="navbar navbar-expand-lg navbar-light bg-dark mb-3 justify-content-end px-5">
-    <a href="{% url 'index' %}" class="btn m-1">Home</a>
-    <a href="{% url 'select_station' %}" class="btn m-1"
-      >Available Service Stations</a>
-    <a href="{% url 'profile' %}" class="btn-pro m-1"
-      >{{ user.first_name }}</a>
-  </nav>
-    {% for i in packages %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark mb-3 justify-content-end px-5">
+        <a href="{% url 'index' %}" class="btn m-1">Home</a>
+        <a href="{% url 'select_station' %}" class="btn m-1">Available Service Stations</a>
+        <a href="{% url 'profile' %}" class="btn-pro m-1">{{ user.first_name }}</a>
+    </nav>
+
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            {% for i in packages %}
+            <div class="col-md-6">
                 <div class="service-package">
                     <h2>{{i.package_name}}</h2>
                     <div class="features">
@@ -150,35 +148,30 @@
                             <li><i class="fas fa-clock"></i> Takes {{i.duration}}</li>
                         </ul>
                         <p>Included</p>
-
                         <ul>
-                            {% for package in packages %} 
-                                {% for desc in package_desc_list %}
-                                    <li>{{ desc }}</li>
-                                {% endfor %} 
+                            {% for desc in package_desc_list %}
+                            <li>{{ desc }}</li>
                             {% endfor %}
                         </ul>
-                      
                     </div>
                     <div class="price">
                         <del>{{i.orginal_price}}0 Rs</del>
                     </div>
                     <div class="discount-price">{{i.discount_price}}0 Rs</div>
-                    <a href="{% url 'bookservice' i.id %}"><button class="btn btn-select">Book this service</button></a>
+                    <a href="{% url 'bookservice' i.id %}"><button class="btn btn-sm bg-primary text-white">Book this service</button></a>
                     {% if user.role == 'stowner' %}
-                    <a href="{% url 'update_packages' i.id %}"><button class="btn btn-sm bg-success m-1">
+                    <a href="{% url 'update_packages' i.id %}"><button class="btn btn-sm bg-success text-white m-1">
                             Update service packages
                         </button></a>
-                    <a href="{% url 'delete_package' i.id %}"><button class="btn btn-sm bg-danger">
+                    <a href="{% url 'delete_package' i.id %}"><button class="btn btn-sm bg-danger text-white">
                             Delete service packages
-                    </button></a>
+                        </button></a>
                     {% endif %}
                 </div>
             </div>
-            <!-- Add more service packages here -->
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
 </body>
 
 </html>
